@@ -8,6 +8,7 @@ External packages: none
 """
 
 import csv
+import os
 from pathlib import Path
 
 
@@ -101,45 +102,108 @@ def display_students():
 def search_student():
     """Find and display a student by name."""
     # TODO 1:
-    # Ask for a name. Search students without worrying about capital letters.
+    Name=input("Enter student name to search: ").strip()
+    for student in students:
+        if student["name"].lower() == Name.lower():
+            print(f"Student found: {student['name']}")
+            print(
+                f"   English: {student['marks']['English']:.1f} | "
+                f"Mathematics: {student['marks']['Mathematics']:.1f} | "
+                f"Computer Science: {student['marks']['Computer Science']:.1f}"
+            )
+            print(
+                f"   Total: {student['total']:.1f}/300 | "
+                f"Percentage: {student['percentage']:.2f}% | "
+                f"Grade: {student['grade']}"
+            )
+            return
     # Display the matching record, or print "Student not found".
-    print("TODO: Build the student search feature.")
+    if not any(student["name"].lower() == Name.lower() for student in students):
+        print("Student not found.")
+    
 
 
 def show_class_average():
     """Calculate and display the average percentage of the whole class."""
     # TODO 2:
-    # Handle an empty list first.
-    # Hint: add all student percentages, then divide by len(students).
-    print("TODO: Build the class average feature.")
+    if not students:
+        print("No student records are available to calculate the class average.")
+        return
+    
+    total_percentage = sum(student["percentage"] for student in students)
+    class_average = total_percentage / len(students)
+    print(f"Class Average: {class_average:.2f}%"
+          )
 
 
 def show_highest_scoring_student():
     """Display the student with the highest percentage."""
     # TODO 3:
-    # Handle an empty list first.
+    if not students:
+        print("No student records are available to determine the highest-scoring student.")
+        return
     # Hint: max(students, key=...)
-    print("TODO: Build the highest-scoring student feature.")
+    highest_student = max(students, key=lambda s: s["percentage"])
+    print(f"Highest-Scoring Student: {highest_student['name']}")
+    print(
+        f"   English: {highest_student['marks']['English']:.1f} | "
+        f"Mathematics: {highest_student['marks']['Mathematics']:.1f} | "
+        f"Computer Science: {highest_student['marks']['Computer Science']:.1f}"
+    )
+    print(
+        f"   Total: {highest_student['total']:.1f}/300 | "
+        f"Percentage: {highest_student['percentage']:.2f}% | "
+        f"Grade: {highest_student['grade']}"
+    )
 
 
 def save_results():
     """Save all student records to students.csv."""
     # TODO 4:
-    # Use csv.DictWriter or csv.writer.
-    # Suggested columns:
-    # name, english, mathematics, computer_science, total, percentage, grade
-    print("TODO: Save the results to students.csv.")
+    if not students:
+        print("no student records are available to save.")
+        return
+    with open(DATA_FILE, mode='w', newline='') as file:
+        writer = csv.writer(file)
+        writer.writerow(["Name", "English", "Mathematics", "Computer Science", "Total", "Percentage", "Grade"])
+        for student in students:
+            writer.writerow([
+                student["name"],
+                student["marks"]["English"],
+                student["marks"]["Mathematics"],
+                student["marks"]["Computer Science"],
+                student["total"],
+                student["percentage"],
+                student["grade"]
+            ])
 
+   
+    
+    print(f"Student records saved to {DATA_FILE}.")
 
 def load_results():
     """Load existing records from students.csv when the program starts."""
     # TODO 5:
-    # 1. Check DATA_FILE.exists().
-    # 2. Open the CSV file.
-    # 3. Convert numeric text back to float.
-    # 4. Append each reconstructed dictionary to students.
-    # The program should still work when the file does not exist.
-    pass
+    if not os.path.exists(DATA_FILE):
+        print(f"No existing records found in {DATA_FILE}. Starting with an empty list.")
+        return
+    if os.path.exists(DATA_FILE):
+        with open(DATA_FILE, mode='r', newline='') as file:
+            reader = csv.DictReader(file)
+            for row in reader:
+                student = {
+                    "name": row["Name"],
+                    "marks": {
+                        "English": float(row["English"]),
+                        "Mathematics": float(row["Mathematics"]),
+                        "Computer Science": float(row["Computer Science"])
+                    },
+                    "total": float(row["Total"]),
+                    "percentage": float(row["Percentage"]),
+                    "grade": row["Grade"]
+                }
+                students.append(student)
+        print(f"Loaded {len(students)} student records from {DATA_FILE}.")
 
 
 def print_menu():
