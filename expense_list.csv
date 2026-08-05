@@ -1,0 +1,6 @@
+ExpenseId,Date,Category,Description,Amount,Payment Method
+1,26-01-2009,Entertainment,tv sound sytem,2333.0,Card
+2,23-01-2008,Shopping,shoppingtrip,232.0,Card
+3,23-01-2026,Other,a little shopping,223.0,Card
+4,23-10-2007,Entertainment,tv ,323.0,Card
+5,23-01-2009,Bills,tv bill,344.0,Card

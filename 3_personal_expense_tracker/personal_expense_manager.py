@@ -3,7 +3,7 @@ from datetime import datetime
 import os
 headers=["ExpenseId","Date","Category","Description","Amount","Payment Method"]
 try:
-    with open("expenselist.csv",'r',newline="") as file:
+    with open("expense_list.csv",'r',newline="") as file:
         reader=csv.reader(file)
         expenses=list(reader)
         if expenses and expenses[0] == headers:
@@ -54,8 +54,9 @@ def add_expense():
         index=index+1
     check=False
     while check == False:
-        choice=int(input("pick from 1 to 8"))
         try:
+          choice=int(input("pick from 1 to 8"))
+        
           if choice >= 1 and choice <= 8:
              check=True
              category=categories[choice-1]
@@ -109,12 +110,12 @@ def add_expense():
     print("Expense added sucessfully")
     print(f"new expense id :{expense_id}")
     #loading into file 
-    with open("expenselist.csv",'w',newline="") as write:
+    with open("expense_list.csv",'w',newline="") as write:
         writer=csv.writer(write)
         writer.writerow(headers)
         writer.writerows(expenses)
 def view_expense():
-    with open("expenselist.csv",'r',newline="") as file:
+    with open("expense_list.csv",'r',newline="") as file:
         reader=csv.reader(file)
         rows=list(reader)
         for row in rows:
@@ -123,28 +124,71 @@ def view_expense():
             if row == rows[0]:
                 print("_"*100)
 def search_expenses():
-    with open("expense_list,csv",'r',newline="")as file:
-        print("1.Category\n2.Description")
-        search_by:
+
+    global headers
+    with open("expense_list.csv",'r',newline="")as file:
+        while True:
+         print("1.Category\n2.Description")
+         try:
+             search_by=int(input("What do you want to search by.Please pick either 1 or 2 "))
+             if search_by != 1 and search_by != 2:
+                 print("invalid...")
+                 continue
+             else:break
+         except ValueError:
+             print("Invalid...please only enter a number")
+             continue
+         
+        if search_by == 1:
+            categories=["Food","Transport","Education","Entertainment","Shopping","Bills","Health","Other"]
+            index=1
+            for category in categories:
+                    print(f"{index}:{category}")
+                    index=index+1
+            check=False
+            while check == False:
+                    try:
+                      choice=int(input("pick from 1 to 8"))
+                    
+                      if choice >= 1 and choice <= 8:
+                         check=True
+                         category=categories[choice-1]
+                      else:
+                        print("invalid choice,please pick from given options.....") 
+                    except ValueError:
+                        print("invalid choice,please pick from given options.....")
+                        continue   
+            count=0
+            reader=csv.reader(file)
+            rows=list(reader)
+            list_search=[]
+            for row in rows[1:] :
+               if row[2] == category:
+                list_search.append(row)
+                count=count+1
+               else:
+                continue
             
-        
-        
+        else:
+            search_item=input("enter description you want to search")
+            reader=csv.reader(file)
+            list_search=[]
+            rows=list(reader)
+            count=0
+            for row in rows[1:]:
+                if search_item.lower() in row[3].lower():
+                    count=count+1
 
-            
-
-
-
-
-
-
-
-
-
-
-add_expense()
-view_expense()
-
-
+                    list_search.append(row)
+                else:
+                    continue
+        if count == 0 :
+            print("No matching data found")
+        else:
+            print(f"{count}:searches found")
+            print(f"|{headers[0]:<10}|{headers[1]:<10}|{headers[2]:<20}|{headers[3]:<20}|{headers[4]:<10}|{headers[5]:<10}")
+            for row in list_search:
+                print(f"|{row[0]:<10}|{row[1]:<10}|{row[2]:<20}|{row[3]:<20}|{row[4]:<10}|{row[5]:<10}")
 
 
 
