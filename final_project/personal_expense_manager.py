@@ -1,27 +1,33 @@
 import csv
 from datetime import datetime
+import os
+headers=["ExpenseId","Date","Category","Description","Amount","Payment Method"]
 try:
-    file=open("expense_list.csv","r")
-    add_data=open("expense_list.csv","a")
-except PermissionError:
-    print("file cannot be read")
+    with open("expenselist.csv",'r') as file:
+        reader=csv.reader(file)
+        expenses=list(reader)
 except FileNotFoundError:
-    add_data=open("expense_list.csv","w")
-    writer=csv.writer(add_data)
-    writer.writerow(["ExpenseId","Date","Category","Description","Amount","Payment method"])
-
+    expenses=[]
+except PermissionError:
+    print("file not readable")
 
 def add_expense():
-    global file 
-    read_data=file.read()
-    #EXPENSE ID
+    global expenses
+    global file
     try:
-        expense_id=str(int(read_data[-1][0])+1)
-    except ValueError:
-        expense_id="1"
+        last_id=int(expenses[-1][0])
+        expense_id=last_id+1
+        print(expense_id)
+        
     except IndexError:
-         writer=csv.writer(add_data)
-         writer.writerow(["ExpenseId","Date","Category","Description","Amount","Payment method"])
+        expense_id="1"
+        print(expense_id)
+
+
+
+
+        
+
 
     #DATE
     check=False
@@ -36,6 +42,7 @@ def add_expense():
             continue
             
     #Category
+    print("REASONS OF EXPENSE:")
     categories=["Food","Transport","Education","Entertainment","Shopping","Bills","Health","Other"]
     index=1
     for category in categories:
@@ -52,14 +59,20 @@ def add_expense():
     #Description
     while True:
         description=input("DESCRIPTION OF EXPENSE")
-        if description == None:
+        if description == None or description == "":
             print("description cannot be empty..")
             continue
         else:
             break
     #Amount
     while True:
-        amount=float(input("please enter amount:"))
+        try:
+            amount=float(input("please enter amount:"))
+            
+        except ValueError:
+            print("please enter number")
+        
+            continue
         if amount <= 0 :
             print("invalid amout(amount should always be greater than zero)")
             continue
@@ -74,17 +87,25 @@ def add_expense():
     while True :
         choice=int(input("enter your payment method (1-3)"))
         if choice >= 1 and choice <= 3:
-            print("invalid choice pick between 1-3")
-            
-            continue
-        else:
             method=Methods[choice-1]
-    
             break
+        else:
+            print("Invalid choice please pick between 1-3")
+            continue
+    #storing
     info=[expense_id,date,category,description,amount,method]
-    writer=csv.writer(add_data)
-    writer.writerow(info)
-add_expense()
+    expenses.append(info)
+    print(f"new expense id :{expense_id}")
+   
+
+
+                
+
+
+
+    
+
+
 
 
 
