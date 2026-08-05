@@ -10,6 +10,7 @@ except FileNotFoundError:
     expenses=[]
 except PermissionError:
     print("file not readable")
+    expenses=[]
 
 def add_expense():
     global expenses
@@ -17,7 +18,7 @@ def add_expense():
     try:
         last_id=int(expenses[-1][0])
         expense_id=last_id+1
-        print(expense_id)
+        
         
     except IndexError:
         expense_id="1"
@@ -96,6 +97,8 @@ def add_expense():
     info=[expense_id,date,category,description,amount,method]
     expenses.append(info)
     print(f"new expense id :{expense_id}")
+    #loading into file
+    with open
    
 
 
