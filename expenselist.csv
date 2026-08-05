@@ -1,0 +1,3 @@
+ExpenseId,Date,Category,Description,Amount,Payment Method
+1,23-01-2009,Education,3,3.0,Online
+2,23-01-2009,Transport,2,2.0,Card

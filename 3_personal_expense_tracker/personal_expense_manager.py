@@ -3,9 +3,11 @@ from datetime import datetime
 import os
 headers=["ExpenseId","Date","Category","Description","Amount","Payment Method"]
 try:
-    with open("expenselist.csv",'r') as file:
+    with open("expenselist.csv",'r',newline="") as file:
         reader=csv.reader(file)
         expenses=list(reader)
+        if expenses and expenses[0] == headers:
+            expenses.pop(0)
 except FileNotFoundError:
     expenses=[]
 except PermissionError:
@@ -15,14 +17,15 @@ except PermissionError:
 def add_expense():
     global expenses
     global file
+    global headers
     try:
         last_id=int(expenses[-1][0])
         expense_id=last_id+1
         
         
-    except IndexError:
+    except (ValueError,IndexError):
         expense_id="1"
-        print(expense_id)
+        
 
 
 
@@ -52,11 +55,15 @@ def add_expense():
     check=False
     while check == False:
         choice=int(input("pick from 1 to 8"))
-        if choice >= 1 and choice <= 8:
-            check=True
-            category=categories[choice-1]
-        else:
+        try:
+          if choice >= 1 and choice <= 8:
+             check=True
+             category=categories[choice-1]
+          else:
+            print("invalid choice,please pick from given options.....") 
+        except ValueError:
             print("invalid choice,please pick from given options.....")
+            continue
     #Description
     while True:
         description=input("DESCRIPTION OF EXPENSE")
@@ -87,19 +94,34 @@ def add_expense():
         index=index+1
     while True :
         choice=int(input("enter your payment method (1-3)"))
-        if choice >= 1 and choice <= 3:
+        try:
+         if choice >= 1 and choice <= 3:
             method=Methods[choice-1]
             break
-        else:
+         else:
             print("Invalid choice please pick between 1-3")
             continue
+        except ValueError:
+            print("Invalid choice please pick between 1-3")
     #storing
     info=[expense_id,date,category,description,amount,method]
     expenses.append(info)
     print(f"new expense id :{expense_id}")
-    #loading into file
-    with open
-   
+    #loading into file 
+    with open("expenselist.csv",'w',newline="") as write:
+        writer=csv.writer(write)
+        writer.writerow(headers)
+        writer.writerows(expenses)
+def view_expense():
+    with open("expenselist.csv",'r',newline="") as file:
+        reader=csv.reader(file)
+        rows=list(reader)
+        for row in rows:
+            print(row)
+
+
+
+
 
 
                 
