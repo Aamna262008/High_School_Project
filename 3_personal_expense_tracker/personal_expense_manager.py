@@ -106,6 +106,7 @@ def add_expense():
     #storing
     info=[expense_id,date,category,description,amount,method]
     expenses.append(info)
+    print("Expense added sucessfully")
     print(f"new expense id :{expense_id}")
     #loading into file 
     with open("expenselist.csv",'w',newline="") as write:
@@ -117,8 +118,31 @@ def view_expense():
         reader=csv.reader(file)
         rows=list(reader)
         for row in rows:
-            print(row)
+            
+            print(f"|{row[0]:<10}|{row[1]:<10}|{row[2]:<20}|{row[3]:<20}|{row[4]:<10}|{row[5]:<10}")
+            if row == rows[0]:
+                print("_"*100)
+def search_expenses():
+    with open("expense_list,csv",'r',newline="")as file:
+        print("1.Category\n2.Description")
+        search_by:
+            
+        
+        
 
+            
+
+
+
+
+
+
+
+
+
+
+add_expense()
+view_expense()
 
 
 
