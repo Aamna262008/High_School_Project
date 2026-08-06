@@ -2,36 +2,43 @@ import csv
 from datetime import datetime
 import os
 headers=["ExpenseId","Date","Category","Description","Amount","Payment Method"]
+file_path = os.path.join(os.path.dirname(__file__), "expense_list.csv")
 try:
-    with open("expense_list.csv",'r',newline="") as file:
+    with open(file_path,'r',newline="") as file:
         reader=csv.reader(file)
         expenses=list(reader)
-        if expenses and expenses[0] == headers:
+        if expenses[0] == headers and expenses:
             expenses.pop(0)
 except FileNotFoundError:
     expenses=[]
 except PermissionError:
     print("file not readable")
     expenses=[]
-
 def add_expense():
     global expenses
     global file
     global headers
+    #Expense_Id
+    if  expenses:
+        
+        for index in range(len(expenses)-1,-1,-1):
+            if not expenses[index]:
+                expenses.pop(index)
+            
     try:
-        last_id=int(expenses[-1][0])
-        expense_id=last_id+1
-        
-        
-    except (ValueError,IndexError):
+       last_id=expenses[-1][0]
+       print(last_id)
+       expense_id=int(last_id)+1
+       expense_id=str(expense_id)
+    except IndexError:
         expense_id="1"
-        
 
 
 
 
-        
 
+
+ 
 
     #DATE
     check=False
@@ -94,8 +101,9 @@ def add_expense():
         print(f"{index}:{method}")
         index=index+1
     while True :
-        choice=int(input("enter your payment method (1-3)"))
+        
         try:
+         choice=int(input("enter your payment method (1-3)"))
          if choice >= 1 and choice <= 3:
             method=Methods[choice-1]
             break
@@ -110,35 +118,46 @@ def add_expense():
     print("Expense added sucessfully")
     print(f"new expense id :{expense_id}")
     #loading into file 
-    with open("expense_list.csv",'w',newline="") as write:
+    with open(file_path,'w',newline="") as write:
         writer=csv.writer(write)
         writer.writerow(headers)
         writer.writerows(expenses)
 def view_expense():
-    with open("expense_list.csv",'r',newline="") as file:
-        reader=csv.reader(file)
-        rows=list(reader)
-        for row in rows:
+    try:
+     with open(file_path,'r',newline="") as file:
+         reader=csv.reader(file)
+         rows=list(reader)
+         total=0
+         for row in rows:
             
             print(f"|{row[0]:<10}|{row[1]:<10}|{row[2]:<20}|{row[3]:<20}|{row[4]:<10}|{row[5]:<10}")
             if row == rows[0]:
                 print("_"*100)
+         for row in rows[1:]:
+            total=total+float(row[4])
+         print(f"records present:{expenses[-1][0]:<48}|Total PKR: {total}")
+    except FileNotFoundError:
+        print("no such file exists")
+    except IndexError:
+        print("No such file exists")
 def search_expenses():
 
     global headers
-    with open("expense_list.csv",'r',newline="")as file:
-        while True:
-         print("1.Category\n2.Description")
-         try:
+    try:
+     with open(file_path,'r',newline="")as file:
+         while True:
+           print("1.Category\n2.Description")
+           try:
              search_by=int(input("What do you want to search by.Please pick either 1 or 2 "))
              if search_by != 1 and search_by != 2:
                  print("invalid...")
                  continue
              else:break
-         except ValueError:
+           except ValueError:
              print("Invalid...please only enter a number")
              continue
-         
+    except FileNotFoundError:
+        print("File does not exist")     
         if search_by == 1:
             categories=["Food","Transport","Education","Entertainment","Shopping","Bills","Health","Other"]
             index=1
@@ -206,69 +225,194 @@ def spending_summary():
     highest_spending_category=[]
     max_expense=[]
     largest_expense=[]
-    with open("expense_list.csv",'r') as file:
-        reader=csv.reader(file)
-        rows=list(reader)
-        for row in rows[1:]:
-            grand_total=grand_total + float(row[4])
-            expense_list.append(float(row[4]))
+    try:
+     with open(file_path,'r') as file:
+         reader=csv.reader(file)
+         rows=list(reader)
+         for row in rows[1:]:
+             grand_total=grand_total + float(row[4])
+             expense_list.append(float(row[4]))
 
        
-            num_of_expense=num_of_expense+1
-            if row[2] == "Food"  :
+             num_of_expense=num_of_expense+1
+             if row[2] == "Food"  :
                 total_food = total_food + float(row[4])
-            elif row[2] == "Transport" :
+             elif row[2] == "Transport" :
                total_transport = total_transport + float(row[4])
-            elif row[2] == "Education":
+             elif row[2] == "Education":
                 total_education=total_education+float(row[4])
-            elif row[2] == "Entertainment" :
+             elif row[2] == "Entertainment" :
                 total_entertainment=total_entertainment+float(row[4])
-            elif row[2] == "Shopping":
+             elif row[2] == "Shopping":
                 total_shopping=total_shopping+float(row[4])
-            elif row[2] =="Bills":
+             elif row[2] =="Bills":
                 total_bills=total_bills+float(row[4])
-            elif row[2] == "Health":
+             elif row[2] == "Health":
                 total_health=total_health+float(row[4])
-            elif row[2] == "Other":
+             elif row[2] == "Other":
                 total_other=total_other+float(row[4])
-        category_expense_list=[("Food",total_food),("Transport",total_transport),("Education",total_education),("Entertainment",total_entertainment),("Shopping",total_shopping),("Bills",total_bills),("Health",total_health),("Other",total_other)]
-        highest=max(category[1] for category in category_expense_list)
-        for category,amount in category_expense_list:
+         category_expense_list=[("Food",total_food),("Transport",total_transport),("Education",total_education),("Entertainment",total_entertainment),("Shopping",total_shopping),("Bills",total_bills),("Health",total_health),("Other",total_other)]
+         highest=max(category[1] for category in category_expense_list)
+         for category,amount in category_expense_list:
            if amount == highest:
              
              highest_spending_category.append((category,amount))
-        try:
+         try:
            max_expense=max(expense_list)
-        except ValueError:
+         except ValueError:
             print("Empty File")
-        for row in rows[1:]:
+         for row in rows[1:]:
             if float(row[4]) == max_expense:
                 largest_expense.append(row)
-        try:
+         try:
             avg_expense=grand_total/num_of_expense
-        except ZeroDivisionError:
+         except ZeroDivisionError:
             print("No expense") 
-        print(f"Grand_Total:{grand_total}")
-        print(f"Total_Expenses:{num_of_expense}")
-        print(f"Total Expense Of Food:{total_food}")
-        print(f"Total Expense Of Transport:{total_transport}")
-        print(f"Total Expense Of Education:{total_education}")
-        print(f"Total Expense Of Entertainment:{total_entertainment}")
-        print(f"Total Expense Of Shopping:{total_shopping}")
-        print(f"Total Expense Of Bills:{total_bills}")
-        print(f"Total Expense Of Health:{total_health}")
-        print(f"Other Expenses:{total_other}") 
-        for list_ in highest_spending_category:
-            print(f"Category with most amount of money spent:{list_}")
-        for list_ in largest_expense:
-            print(f"Largest Expense\n{list_}")  
+         print("SPENDING SUMMARY".center(50,"_"))
+         print(f"Grand_Total:{grand_total}")
+         print(f"Total_Expenses:{num_of_expense}")
+         print(f"Average Expense{avg_expense}")
+         print(f"Total Expense Of Food:{total_food}")
+         print(f"Total Expense Of Transport:{total_transport}")
+         print(f"Total Expense Of Education:{total_education}")
+         print(f"Total Expense Of Entertainment:{total_entertainment}")
+         print(f"Total Expense Of Shopping:{total_shopping}")
+         print(f"Total Expense Of Bills:{total_bills}")
+         print(f"Total Expense Of Health:{total_health}")
+         print(f"Other Expenses:{total_other}") 
+         for list_ in highest_spending_category:
+             print(f"Category with most amount of money spent:{list_[0]}")
+         for list_ in largest_expense:
+             print(f"Largest Expense:\nExpense_Id:{list_[0]}\nDate:{list_[1]}\nCategory:{list_[2]}\nDescription:{list_[3]}\nAmount:{list_[4]}\nPaymentMethod:{list_[5]}") 
+    except FileNotFoundError:
+       print("File does not exist") 
+def edit_expense():
+     
+   while True:
+     try:
+         id_to_edit=int(input("Enter the id you want to edit...."))
+         row_to_edit=expenses[id_to_edit-1]
+         contents_row_to_edit=list(row_to_edit)
+         header=list(headers)
+         for x in range(0,6):
+            print(f"{header[x]}:{contents_row_to_edit[x]}")
+            if x == 0:
+                continue
+            else:
+               while True:
+
+                 choice=input("Do you want to change this value?(please only answer in yes or no)")
+                 if choice.lower() == "yes" or choice.lower() == "no":
+                    break
+                 else:
+                    continue
+               if choice.lower() == "no":
+                  continue
+               elif choice.lower() == "yes":
+                  if x==1:
+                     
+                    while True:
+                             date=input("date of expense(DD-MM-YYYY)please take care of format")
+                             try:
+                                 datetime.strptime(date, "%d-%m-%Y")
+                                 check=True
+                                 row_to_edit[x] =date
+                                 
+                         
+                                 break
+                             except ValueError as e:
+                                 continue
+                  elif x == 2:
+                      print("REASONS OF EXPENSE:")
+                      categories=["Food","Transport","Education","Entertainment","Shopping","Bills","Health","Other"]
+                      index=1
+                      for category in categories:
+                          print(f"{index}:{category}")
+                          index=index+1
+                          
+                      while True:
+                         try:
+                               choice=int(input("pick from 1 to 8"))
+                              
+                               if choice >= 1 and choice <= 8:
+                                   
+                                   category=categories[choice-1]
+                                   row_to_edit[x]=category
+                                   break
+                               else:
+                                  print("invalid choice,please pick from given options.....") 
+                                  continue
+                         except ValueError:
+                                  print("invalid choice,please pick from given options.....")
+                                  continue
+                  elif x== 3:
+                      while True:
+                              description=input("DESCRIPTION OF EXPENSE:")
+                              if description == None or description == "":
+                                  print("description cannot be empty..")
+                                  continue
+                              else:
+                                  row_to_edit[x]=description
+                                  break
+                      
+                  elif x == 4:
+                      while True:
+                              try:
+                                  amount=float(input("please enter amount:"))
+                                  
+                              except ValueError:
+                                  print("please enter number")
+                              
+                                  continue
+                              if amount <= 0 :
+                                  print("invalid amout(amount should always be greater than zero)")
+                                  continue
+                              else:
+                                  row_to_edit[x]=amount
+                                  break
+                  elif x == 5:
+                      Methods=["Cash","Card","Online"]
+                      index=1
+                      for method in Methods:
+                              print(f"{index}:{method}")
+                              index=index+1
+                      while True :
+                              
+                         try:
+                               choice=int(input("enter your payment method (1-3)"))
+                               if choice >= 1 and choice <= 3:
+                                  method=Methods[choice-1]
+                                  row_to_edit[x]=method
+                                  break
+                               else:
+                                  print("Invalid choice please pick between 1-3")
+                                  continue
+                         except ValueError:
+                                  print("Invalid choice please pick between 1-3")
+         expenses[id_to_edit-1]=row_to_edit
+         try:
+             with open(file_path,'w',newline="") as file:
+                 writer=csv.writer(file)
+                 writer.writerow(header)
+                 writer.writerows(expenses)
+         except FileNotFoundError:
+             print("File not found")
+         break     
+     except (IndexError,ValueError):
+         print('Please make sure you only enter a number')
+         continue
+              
+
+         
+                      
+                      
+                     
+                     
                
-
             
-
-
-  
-
+                
+                 
+             
             
 
 
