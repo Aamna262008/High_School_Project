@@ -117,11 +117,7 @@ def add_expense():
     expenses.append(info)
     print("Expense added sucessfully")
     print(f"new expense id :{expense_id}")
-    #loading into file 
-    with open(file_path,'w',newline="") as write:
-        writer=csv.writer(write)
-        writer.writerow(headers)
-        writer.writerows(expenses)
+  
 def view_expense():
     try:
      with open(file_path,'r',newline="") as file:
@@ -287,15 +283,32 @@ def spending_summary():
     except FileNotFoundError:
        print("File does not exist") 
 def edit_expense():
+   global expenses
      
    while True:
      try:
          id_to_edit=int(input("Enter the id you want to edit...."))
-         row_to_edit=expenses[id_to_edit-1]
-         contents_row_to_edit=list(row_to_edit)
+         row_to_edit=None
+         
+         check=0
+         for row in expenses:
+             
+             if id_to_edit == int(row[0]):
+                 row_to_edit=row
+                 break
+             else:
+             
+
+                check=check+1
+         if row_to_edit == None:
+                 print("ID NOT FOUND ")
+                 break
+         
+         print(row_to_edit)
+         
          header=list(headers)
          for x in range(0,6):
-            print(f"{header[x]}:{contents_row_to_edit[x]}")
+            print(f"{header[x]}:{row_to_edit[x]}")
             if x == 0:
                 continue
             else:
@@ -315,7 +328,7 @@ def edit_expense():
                              date=input("date of expense(DD-MM-YYYY)please take care of format")
                              try:
                                  datetime.strptime(date, "%d-%m-%Y")
-                                 check=True
+                                 
                                  row_to_edit[x] =date
                                  
                          
@@ -389,19 +402,59 @@ def edit_expense():
                                   continue
                          except ValueError:
                                   print("Invalid choice please pick between 1-3")
-         expenses[id_to_edit-1]=row_to_edit
-         try:
-             with open(file_path,'w',newline="") as file:
-                 writer=csv.writer(file)
-                 writer.writerow(header)
-                 writer.writerows(expenses)
-         except FileNotFoundError:
-             print("File not found")
+                                  
+         
          break     
-     except (IndexError,ValueError):
+     except (ValueError):
          print('Please make sure you only enter a number')
          continue
-              
+     except (IndexError):
+         print("Index does not exist")
+def delete_expense():
+    global expenses
+    try:
+     id_to_delete=int(input("please enter id of data you want to delete"))
+     index=1
+     deleted_data=[]
+     for row in expenses[1:]:
+        try:
+            if int(row[0]) == id_to_delete:
+                print(row)
+                while True:
+                    choice=input("Do you want to delete this data,(please only answer in yes or no)")
+                    if choice.lower() == "yes":
+                        deleted_data.append(row)
+                        expenses.pop(index)
+                        print("data deleted")
+                        break
+                    elif choice.lower() == "no" :
+                        print("data not deleted")
+                        break
+                    else:
+                        continue
+            else:
+                index=index+1
+            
+            
+                        
+
+        except(IndexError,ValueError):
+            
+            continue
+    except(ValueError):
+        print("Enter a number please")    
+def save_data():
+    
+        with open(file_path,'w',newline="") as file:
+            writer=csv.writer(file)
+            writer.writerow(headers)
+            writer.writerows(expenses)
+            
+
+
+
+
+
 
          
                       

@@ -1,4 +1,4 @@
 ExpenseId,Date,Category,Description,Amount,Payment Method
-1,23-01-2004,Entertainment,2,2.0,Card
-2,11-08-2026,Education,result,60000.0,Online
-3,22-12-1221,Transport,2,2.0,Card
+1,23-01-2004,Entertainment,4,4.0,Card
+2,23-02-2004,Health,bill,32.0,Online
+3,23-03-2003,Education,3,3.0,Online
