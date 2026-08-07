@@ -416,7 +416,7 @@ def delete_expense():
      id_to_delete=int(input("please enter id of data you want to delete"))
      index=1
      deleted_data=[]
-     for row in expenses[1:]:
+     for row in expenses:
         try:
             if int(row[0]) == id_to_delete:
                 print(row)
@@ -449,8 +449,43 @@ def save_data():
             writer=csv.writer(file)
             writer.writerow(headers)
             writer.writerows(expenses)
-            
 
+while True:
+   print(f"MENU\npick one from given option:\n1.Add Expense\n2.View Expense\n3.Search Expense\n4.See Spending Summary\n5.Edit an Expense\n6.Delete an Expense\n7.Save Contents\n8.Exit\n\n\n")
+   try:            
+       choice_user=int(input("What do you want to do:"))
+       if choice_user >=1 and choice_user <=8:
+           if choice_user == 1:
+               add_expense()
+               continue
+           elif choice_user == 2:
+               view_expense()
+               continue
+           elif choice_user == 3:
+               search_expenses()
+               continue
+           elif choice_user == 4:
+               spending_summary()
+               continue
+           elif choice_user == 5:
+               edit_expense()
+               continue
+           elif choice_user == 6:
+               delete_expense()
+               continue
+           elif choice_user == 7 :
+               save_data()
+               continue
+           elif choice_user == 8:
+               print("8")
+               break
+       else:
+           print("Invalid Input(please pick between 1 and 8(numeric form only.....))")
+           continue
+   except ValueError:
+       print("Invalid Input(please pick between 1 and 8(numeric form only.....))")
+       continue     
+     
 
 
 
