@@ -1,1 +1,7 @@
 ExpenseId,Date,Category,Description,Amount,Payment Method
+1,23-01-2020,Entertainment,tv system,500.0,Card
+3,24-05-2025,Entertainment,speaker,340.0,Card
+5,30-01-2025,Entertainment,tv ,45.0,Card
+6,23-01-2023,Bills,tv,400.0,Card
+7,23-04-2024,Entertainment,tv system,400.0,Card
+8,26-09-2025,Shopping,tv stand ,400.0,Card

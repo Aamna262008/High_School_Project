@@ -117,21 +117,21 @@ def add_expense():
     expenses.append(info)
     print("Expense added sucessfully")
     print(f"new expense id :{expense_id}")
-  
 def view_expense():
     try:
      with open(file_path,'r',newline="") as file:
          reader=csv.reader(file)
          rows=list(reader)
          total=0
+         record=-1
          for row in rows:
-            
-            print(f"|{row[0]:<10}|{row[1]:<10}|{row[2]:<20}|{row[3]:<20}|{row[4]:<10}|{row[5]:<10}")
+            record = record+1
+            print(f"|{row[0]:<10}|{row[1]:<10}|{row[2]:<20}|{row[3]:<50}|{row[4]:<10}|{row[5]:<10}")
             if row == rows[0]:
-                print("_"*100)
+                print("_"*130)
          for row in rows[1:]:
             total=total+float(row[4])
-         print(f"records present:{expenses[-1][0]:<48}|Total PKR: {total}")
+         print(f"records present:{record:<78}|Total PKR: {total}")
     except FileNotFoundError:
         print("no such file exists")
     except IndexError:
@@ -145,65 +145,68 @@ def search_expenses():
            print("1.Category\n2.Description")
            try:
              search_by=int(input("What do you want to search by.Please pick either 1 or 2 "))
-             if search_by != 1 and search_by != 2:
-                 print("invalid...")
-                 continue
-             else:break
+             if search_by == 1 or search_by == 2:
+                 if search_by == 1:
+                     categories=["Food","Transport","Education","Entertainment","Shopping","Bills","Health","Other"]
+                     index=1
+                     for category in categories:
+                                     print(f"{index}:{category}")
+                                     index=index+1
+                    
+                     while True:
+                         try:
+                              choice=int(input("pick from 1 to 8"))
+                              
+                                     
+                              if choice >= 1 and choice <= 8:
+                                    
+                                 category=categories[choice-1]
+                                 
+                                 break
+                              else:
+                                  print("invalid choice,please pick from given options.....") 
+                         except ValueError:
+                                         print("invalid choice,please pick from given options.....")
+                                         continue   
+                     count=0
+                     reader=csv.reader(file)
+                     rows=list(reader)
+                     list_search=[]
+                     for row in rows[1:] :
+                                if row[2] == category:
+                                 list_search.append(row)
+                                 count=count+1
+                                else:
+                                 continue
+                             
+                 else:
+                     search_item=input("enter description you want to search")
+                     reader=csv.reader(file)
+                     list_search=[]
+                     rows=list(reader)
+                     count=0
+                     for row in rows[1:]:
+                         if search_item.lower() in row[3].lower():
+                             count=count+1
+                             list_search.append(row)
+                         else:
+                                     continue
+                         if count == 0 :
+                             print("No matching data found")
+                         else:
+                             print(f"{count}:searches found")
+                             print(f"|{headers[0]:<10}|{headers[1]:<10}|{headers[2]:<20}|{headers[3]:<20}|{headers[4]:<10}|{headers[5]:<10}")
+                             for row in list_search:
+                                 print(f"|{row[0]:<10}|{row[1]:<10}|{row[2]:<20}|{row[3]:<20}|{row[4]:<10}|{row[5]:<10}")
+                 break
+             else:
+                 print("Invalid Number(p;ease pick between 1 or 2)")
            except ValueError:
              print("Invalid...please only enter a number")
              continue
     except FileNotFoundError:
         print("File does not exist")     
-        if search_by == 1:
-            categories=["Food","Transport","Education","Entertainment","Shopping","Bills","Health","Other"]
-            index=1
-            for category in categories:
-                    print(f"{index}:{category}")
-                    index=index+1
-            check=False
-            while check == False:
-                    try:
-                      choice=int(input("pick from 1 to 8"))
-                    
-                      if choice >= 1 and choice <= 8:
-                         check=True
-                         category=categories[choice-1]
-                      else:
-                        print("invalid choice,please pick from given options.....") 
-                    except ValueError:
-                        print("invalid choice,please pick from given options.....")
-                        continue   
-            count=0
-            reader=csv.reader(file)
-            rows=list(reader)
-            list_search=[]
-            for row in rows[1:] :
-               if row[2] == category:
-                list_search.append(row)
-                count=count+1
-               else:
-                continue
-            
-        else:
-            search_item=input("enter description you want to search")
-            reader=csv.reader(file)
-            list_search=[]
-            rows=list(reader)
-            count=0
-            for row in rows[1:]:
-                if search_item.lower() in row[3].lower():
-                    count=count+1
-
-                    list_search.append(row)
-                else:
-                    continue
-        if count == 0 :
-            print("No matching data found")
-        else:
-            print(f"{count}:searches found")
-            print(f"|{headers[0]:<10}|{headers[1]:<10}|{headers[2]:<20}|{headers[3]:<20}|{headers[4]:<10}|{headers[5]:<10}")
-            for row in list_search:
-                print(f"|{row[0]:<10}|{row[1]:<10}|{row[2]:<20}|{row[3]:<20}|{row[4]:<10}|{row[5]:<10}")
+        
 def spending_summary():
     grand_total=0
     num_of_expense=0
@@ -414,33 +417,40 @@ def delete_expense():
     global expenses
     try:
      id_to_delete=int(input("please enter id of data you want to delete"))
-     index=1
+     index=0
      deleted_data=[]
-     for row in expenses:
+     check = False
+     for index,row in enumerate(expenses):
         try:
             if int(row[0]) == id_to_delete:
                 print(row)
+                check=False
                 while True:
                     choice=input("Do you want to delete this data,(please only answer in yes or no)")
                     if choice.lower() == "yes":
                         deleted_data.append(row)
                         expenses.pop(index)
+                        check=True
+
                         print("data deleted")
                         break
                     elif choice.lower() == "no" :
                         print("data not deleted")
+                        check=True
                         break
                     else:
                         continue
-            else:
-                index=index+1
-            
+        except (IndexError,ValueError):
+            print("Please Enter Number")
+     if check == False:
+        print("ID not found...")
+
             
                         
 
-        except(IndexError,ValueError):
+        
+    
             
-            continue
     except(ValueError):
         print("Enter a number please")    
 def save_data():
@@ -449,7 +459,6 @@ def save_data():
             writer=csv.writer(file)
             writer.writerow(headers)
             writer.writerows(expenses)
-
 while True:
    print(f"MENU\npick one from given option:\n1.Add Expense\n2.View Expense\n3.Search Expense\n4.See Spending Summary\n5.Edit an Expense\n6.Delete an Expense\n7.Save Contents\n8.Exit\n\n\n")
    try:            
@@ -486,6 +495,7 @@ while True:
        print("Invalid Input(please pick between 1 and 8(numeric form only.....))")
        continue     
      
+
 
 
 
