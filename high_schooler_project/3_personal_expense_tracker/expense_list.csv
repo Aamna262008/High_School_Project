@@ -5,3 +5,5 @@ ExpenseId,Date,Category,Description,Amount,Payment Method
 6,23-01-2023,Bills,tv,400.0,Card
 7,23-04-2024,Entertainment,tv system,400.0,Card
 8,26-09-2025,Shopping,tv stand ,400.0,Card
+9,23-02-2005,Entertainment,play,2333.0,Cash
+11,2022-01-23,Food,burger king,300.0,Online

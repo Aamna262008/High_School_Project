@@ -1,5 +1,5 @@
 import csv
-from datetime import datetime
+from datetime import datetime ,date,timedelta
 import os
 headers=["ExpenseId","Date","Category","Description","Amount","Payment Method"]
 file_path = os.path.join(os.path.dirname(__file__), "expense_list.csv")
@@ -27,31 +27,38 @@ def add_expense():
             
     try:
        last_id=expenses[-1][0]
-       print(last_id)
+       print(f"Previous_Id{last_id}")
        expense_id=int(last_id)+1
        expense_id=str(expense_id)
     except IndexError:
         expense_id="1"
-
-
-
-
-
-
- 
-
-    #DATE
-    check=False
-    while check == False:
-        date=input("date of expense(DD-MM-YYYY)please take care of format")
+    #Date
+    while True:
         try:
-            datetime.strptime(date, "%d-%m-%Y")
-            check=True
-    
-            break
-        except ValueError as e:
+          date_input=input("Enter Date Of Expense(dd-mm-yyyy)....please be very careful of this format")
+          current_date=date.today()
+          date_input=datetime.strptime(date_input, "%d-%m-%Y").date()
+          min_date=date(2000,1,1)
+          if date_input < min_date :
+              print(f"No date excepted below{min_date.strftime("%d-%m-%Y")}")
+              continue
+          elif date_input > current_date:
+              print(f"No date excepted after the current date{current_date.strftime("%d-%m-%Y")}")
+              continue
+          else:
+              break
+        except (IndexError,ValueError):
+            print("Invalid Format")
             continue
-            
+
+              
+
+
+
+
+
+
+  
     #Category
     print("REASONS OF EXPENSE:")
     categories=["Food","Transport","Education","Entertainment","Shopping","Bills","Health","Other"]
@@ -113,7 +120,7 @@ def add_expense():
         except ValueError:
             print("Invalid choice please pick between 1-3")
     #storing
-    info=[expense_id,date,category,description,amount,method]
+    info=[expense_id,date_input,category,description,amount,method]
     expenses.append(info)
     print("Expense added sucessfully")
     print(f"new expense id :{expense_id}")
@@ -139,74 +146,105 @@ def view_expense():
 def search_expenses():
 
     global headers
+    global expenses
+
     try:
-     with open(file_path,'r',newline="")as file:
-         while True:
-           print("1.Category\n2.Description")
-           try:
-             search_by=int(input("What do you want to search by.Please pick either 1 or 2 "))
-             if search_by == 1 or search_by == 2:
-                 if search_by == 1:
-                     categories=["Food","Transport","Education","Entertainment","Shopping","Bills","Health","Other"]
-                     index=1
-                     for category in categories:
-                                     print(f"{index}:{category}")
-                                     index=index+1
-                    
-                     while True:
-                         try:
-                              choice=int(input("pick from 1 to 8"))
-                              
-                                     
-                              if choice >= 1 and choice <= 8:
-                                    
-                                 category=categories[choice-1]
-                                 
-                                 break
-                              else:
-                                  print("invalid choice,please pick from given options.....") 
-                         except ValueError:
-                                         print("invalid choice,please pick from given options.....")
-                                         continue   
-                     count=0
-                     reader=csv.reader(file)
-                     rows=list(reader)
-                     list_search=[]
-                     for row in rows[1:] :
+        with open(file_path, 'r', newline="") as file:
+            while True:
+                print("1.Category\n2.Description")
+
+                try:
+                    search_by = int(input("What do you want to search by. Please pick either 1 or 2 "))
+
+                    if search_by == 1 or search_by == 2:
+
+                        if search_by == 1:
+                            categories = [
+                                "Food",
+                                "Transport",
+                                "Education",
+                                "Entertainment",
+                                "Shopping",
+                                "Bills",
+                                "Health",
+                                "Other"
+                            ]
+
+                            index = 1
+
+                            for category in categories:
+                                print(f"{index}:{category}")
+                                index = index + 1
+
+                            while True:
+                                try:
+                                    choice = int(input("pick from 1 to 8"))
+
+                                    if choice >= 1 and choice <= 8:
+                                        category = categories[choice - 1]
+                                        break
+                                    else:
+                                        print("invalid choice,please pick from given options.....")
+
+                                except ValueError:
+                                    print("invalid choice,please pick from given options.....")
+                                    continue
+
+                            count = 0
+                            list_search = []
+
+                            for row in expenses:
                                 if row[2] == category:
-                                 list_search.append(row)
-                                 count=count+1
+                                    list_search.append(row)
+                                    count = count + 1
                                 else:
-                                 continue
-                             
-                 else:
-                     search_item=input("enter description you want to search")
-                     reader=csv.reader(file)
-                     list_search=[]
-                     rows=list(reader)
-                     count=0
-                     for row in rows[1:]:
-                         if search_item.lower() in row[3].lower():
-                             count=count+1
-                             list_search.append(row)
-                         else:
-                                     continue
-                         if count == 0 :
-                             print("No matching data found")
-                         else:
-                             print(f"{count}:searches found")
-                             print(f"|{headers[0]:<10}|{headers[1]:<10}|{headers[2]:<20}|{headers[3]:<20}|{headers[4]:<10}|{headers[5]:<10}")
-                             for row in list_search:
-                                 print(f"|{row[0]:<10}|{row[1]:<10}|{row[2]:<20}|{row[3]:<20}|{row[4]:<10}|{row[5]:<10}")
-                 break
-             else:
-                 print("Invalid Number(p;ease pick between 1 or 2)")
-           except ValueError:
-             print("Invalid...please only enter a number")
-             continue
+                                    continue
+
+                        else:
+                            search_item = input("enter description you want to search")
+
+                            reader = csv.reader(file)
+                            list_search = []
+                            rows = list(reader)
+                            count = 0
+
+                            for row in rows[1:]:
+                                if search_item.lower() in row[3].lower():
+                                    count = count + 1
+                                    list_search.append(row)
+                                else:
+                                    continue
+
+                        if count == 0:
+                            print("No matching data found")
+
+                        else:
+                            print(f"{count}:searches found")
+
+                            print(
+                                f"|{headers[0]:<10}|{headers[1]:<10}|"
+                                f"{headers[2]:<20}|{headers[3]:<20}|"
+                                f"{headers[4]:<10}|{headers[5]:<10}"
+                            )
+
+                            for row in list_search:
+                                print(
+                                    f"|{row[0]:<10}|{row[1]:<10}|"
+                                    f"{row[2]:<20}|{row[3]:<20}|"
+                                    f"{row[4]:<10}|{row[5]:<10}"
+                                )
+
+                        break
+
+                    else:
+                        print("Invalid Number (please pick between 1 or 2)")
+
+                except ValueError:
+                    print("Invalid...please only enter a number")
+                    continue
+
     except FileNotFoundError:
-        print("File does not exist")     
-        
+        print("File does not exist")  
 def spending_summary():
     grand_total=0
     num_of_expense=0
@@ -328,16 +366,23 @@ def edit_expense():
                   if x==1:
                      
                     while True:
-                             date=input("date of expense(DD-MM-YYYY)please take care of format")
-                             try:
-                                 datetime.strptime(date, "%d-%m-%Y")
-                                 
-                                 row_to_edit[x] =date
-                                 
-                         
-                                 break
-                             except ValueError as e:
-                                 continue
+                            try:
+                              date_input=input("Enter Date Of Expense(dd-mm-yyyy)....please be very careful of this format")
+                              current_date=date.today()
+                              date_input=datetime.strptime(date_input, "%d-%m-%Y").date()
+                              min_date=date(2000,1,1)
+                              if date_input < min_date :
+                                  print(f"No date excepted below{min_date.strftime("%d-%m-%Y")}")
+                                  continue
+                              elif date_input > current_date:
+                                  print(f"No date excepted after the current date{current_date.strftime("%d-%m-%Y")}")
+                                  continue
+                              else:
+                                  break
+                            except (IndexError,ValueError):
+                                print("Invalid Format")
+                                continue
+                    
                   elif x == 2:
                       print("REASONS OF EXPENSE:")
                       categories=["Food","Transport","Education","Entertainment","Shopping","Bills","Health","Other"]
