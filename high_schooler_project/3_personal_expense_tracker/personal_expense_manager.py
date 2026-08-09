@@ -51,14 +51,6 @@ def add_expense():
             print("Invalid Format")
             continue
 
-              
-
-
-
-
-
-
-  
     #Category
     print("REASONS OF EXPENSE:")
     categories=["Food","Transport","Education","Entertainment","Shopping","Bills","Health","Other"]
@@ -144,20 +136,15 @@ def view_expense():
     except IndexError:
         print("No such file exists")
 def search_expenses():
-
     global headers
     global expenses
-
     try:
         with open(file_path, 'r', newline="") as file:
             while True:
                 print("1.Category\n2.Description")
-
                 try:
                     search_by = int(input("What do you want to search by. Please pick either 1 or 2 "))
-
                     if search_by == 1 or search_by == 2:
-
                         if search_by == 1:
                             categories = [
                                 "Food",
@@ -169,7 +156,6 @@ def search_expenses():
                                 "Health",
                                 "Other"
                             ]
-
                             index = 1
 
                             for category in categories:
