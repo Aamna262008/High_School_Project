@@ -1,9 +1,41 @@
 ExpenseId,Date,Category,Description,Amount,Payment Method
-1,23-01-2020,Entertainment,tv system,500.0,Card
-3,24-05-2025,Entertainment,speaker,340.0,Card
-5,30-01-2025,Entertainment,tv ,45.0,Card
-6,23-01-2023,Bills,tv,400.0,Card
-7,23-04-2024,Entertainment,tv system,400.0,Card
-8,26-09-2025,Shopping,tv stand ,400.0,Card
-9,23-02-2005,Entertainment,play,2333.0,Cash
-11,2022-01-23,Food,burger king,300.0,Online
+1,2025-01-03,Food,Groceries,8500,Debit Card
+2,2025-01-08,Transport,Uber ride,1250,Cash
+3,2025-01-15,Entertainment,Movie tickets,2200,Cash
+4,2025-01-22,Education,Programming course,6500,Debit Card
+5,2025-02-02,Food,Restaurant dinner,3800,Cash
+6,2025-02-07,Transport,Fuel,4500,Debit Card
+7,2025-02-14,Shopping,Valentine gift,5200,Credit Card
+8,2025-02-25,Bills,Internet bill,3500,Debit Card
+9,2025-03-04,Food,Groceries,9200,Debit Card
+10,2025-03-11,Transport,Careem rides,1800,Cash
+11,2025-03-19,Shopping,Clothes,7800,Credit Card
+12,2025-03-28,Education,Books,4200,Debit Card
+13,2025-04-05,Food,Fast food,2600,Cash
+14,2025-04-12,Entertainment,Concert ticket,7500,Credit Card
+15,2025-04-20,Transport,Fuel,5000,Debit Card
+16,2025-04-29,Bills,Electricity bill,6200,Debit Card
+17,2025-05-03,Food,Groceries,10500,Debit Card
+18,2025-05-09,Shopping,Shoes,9500,Credit Card
+19,2025-05-17,Health,Pharmacy,2800,Cash
+20,2025-05-26,Transport,Uber rides,2300,Cash
+21,2025-06-02,Food,Restaurant dinner,4500,Cash
+22,2025-06-10,Entertainment,Games,3200,Credit Card
+23,2025-06-18,Education,Online course,8000,Debit Card
+24,2025-06-27,Bills,Phone bill,2800,Debit Card
+25,2025-07-04,Food,Groceries,11800,Debit Card
+26,2025-07-11,Shopping,Clothes sale,12500,Credit Card
+27,2025-07-19,Transport,Fuel,5500,Debit Card
+28,2025-07-28,Entertainment,Day out,6800,Cash
+29,2025-08-05,Food,Restaurant dinner,5200,Cash
+30,2025-08-13,Shopping,Electronics,18500,Credit Card
+31,2025-08-21,Transport,Careem rides,2700,Cash
+32,2025-09-06,Education,Study materials,3500,Debit Card
+33,2025-09-15,Food,Groceries,9800,Debit Card
+34,2025-10-03,Bills,Electricity bill,7100,Debit Card
+35,2025-10-14,Entertainment,Movie and snacks,2900,Cash
+36,2025-10-23,Shopping,Clothes,6200,Credit Card
+37,2025-11-05,Food,Groceries,8900,Debit Card
+38,2025-11-16,Transport,Fuel,4800,Debit Card
+39,2025-12-10,Shopping,Holiday shopping,22000,Credit Card
+40,2025-12-22,Entertainment,New Year celebration,8500,Cash

@@ -35,7 +35,9 @@ def load_tasks(filename):
     return tasks
 
 
-def show_report(tasks, today):
+def sort_tasks(tasks, today):
+    # Decide which bucket each task belongs in, without printing anything.
+    # Returning the buckets makes this easy to test.
     completed_count = 0
     overdue = []
     upcoming = []
@@ -47,8 +49,14 @@ def show_report(tasks, today):
         due = datetime.date.fromisoformat(task["due_date"])
         if due < today:
             overdue.append(task)
-        elif due <= today + datetime.timedelta(days=7):
+        elif due <= today + datetime.timedelta(days=3):
             upcoming.append(task)
+
+    return overdue, upcoming, completed_count
+
+
+def show_report(tasks, today):
+    overdue, upcoming, completed_count = sort_tasks(tasks, today)
 
     print()
     print("OVERDUE")
