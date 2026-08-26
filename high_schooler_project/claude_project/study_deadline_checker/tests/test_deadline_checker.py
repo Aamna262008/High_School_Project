@@ -13,10 +13,9 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from study_deadline_checker import sort_tasks
 
-# EXPERIMENT (section 9): using the real current date instead of a
-# fixed date. This is normally a bad idea in tests - the answers now
-# change as real days pass!
-FIXED_TODAY = datetime.date.today()
+# The same fixed date as the handout example.
+# A fixed date keeps the tests predictable on any day they run.
+FIXED_TODAY = datetime.date(2026, 8, 22)
 
 
 def make_task(due_date, completed="no"):

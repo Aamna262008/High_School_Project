@@ -49,7 +49,7 @@ def sort_tasks(tasks, today):
         due = datetime.date.fromisoformat(task["due_date"])
         if due < today:
             overdue.append(task)
-        elif due <= today + datetime.timedelta(days=3):
+        elif due <= today + datetime.timedelta(days=7):
             upcoming.append(task)
 
     return overdue, upcoming, completed_count
