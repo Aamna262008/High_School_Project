@@ -1,0 +1,35 @@
+name: Expense Tracker checks
+
+on:
+  push:
+    paths:
+      - 'claude_projects/simple_expense_tracker/**'
+      - '.github/workflows/expense-tracker.yml'
+  workflow_dispatch:
+
+jobs:
+  test-and-report:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: claude_projects/simple_expense_tracker
+    steps:
+      - name: Get repository code
+        uses: actions/checkout@v7
+
+      - name: Set up Python
+        uses: actions/setup-python@v7
+        with:
+          python-version: '3.13'
+
+      - name: Run unit tests
+        run: python -m unittest discover -s tests -v
+
+      - name: Generate spending report
+        run: python expense_tracker.py --report
+
+      - name: Save report as workflow artifact
+        uses: actions/upload-artifact@v7
+        with:
+          name: spending-report
+          path: claude_projects/simple_expense_tracker/spending_report.txt
