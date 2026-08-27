@@ -1,0 +1,9 @@
+SPENDING REPORT
+===============
+Total spending: PKR 2,200.00
+Food: PKR 700.00
+Transport: PKR 300.00
+Study: PKR 1,200.00
+Highest category: Study
+Recent 7-day spending: PKR 2,200.00
+Weekly budget status: Within budget
