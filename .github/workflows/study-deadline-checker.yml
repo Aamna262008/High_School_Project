@@ -3,7 +3,7 @@ name: Study Deadline Checker tests
 on:
   push:
     paths:
-      - 'high_schooler_project/claude_project/study_deadline_checker/**'
+      - 'high_schooler_project/claude_projects/study_deadline_checker/**'
       - '.github/workflows/study-deadline-checker.yml'
 
 jobs:
@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: high_schooler_project/claude_project/study_deadline_checker
+        working-directory: high_schooler_project/claude_projects/study_deadline_checker
     steps:
       - name: Get repository code
         uses: actions/checkout@v7
