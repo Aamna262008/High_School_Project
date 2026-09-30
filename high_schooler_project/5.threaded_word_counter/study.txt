@@ -1,0 +1,2 @@
+Python programs can do useful work.
+Threads can run independant tasks.
