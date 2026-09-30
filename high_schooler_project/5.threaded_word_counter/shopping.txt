@@ -1,2 +1,2 @@
-Buy milk bread and eggs.
-Add apples to the list.
+Buy   milk   bread  and  eggs.
+Add apples  to the  list.
