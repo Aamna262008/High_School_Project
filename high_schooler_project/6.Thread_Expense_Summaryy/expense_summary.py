@@ -32,7 +32,7 @@ def expense_summary(file_name,pos):
             #Sorting Valid And Invalid
             try:
                 amount=int(row[1])
-                if amount > 0 and amount % 1 == 0:
+                if amount > 0 :
                     valid=valid+1
                     with lock_file:
                         TOTAL_VALID=TOTAL_VALID + 1
@@ -71,34 +71,29 @@ def expense_summary(file_name,pos):
 
         #End of function
 
-# Initialisng Threads
-
-threads=[]
-ind=0
-for name in files_name :
-    t=threading.Thread(target= expense_summary,args=(name,ind),name=name )
-    ind+=1
-    threads.append(t)
-
-#Starting thread
-
-for t in threads:
-    t.start()
-
-#Joining thread
-for t in threads:
-    t.join()
-
-#Printing the summary
-
-print("EXPENSE SUMMARY\nCurrency:PKR")
-for i in range(3):
-    print(f"{files_name[i]} : {file_valid[i]} valid , "
-          f"{file_invalid[i]} invalid ,total {file_total[i]}")
-print("\nCATEGORY TOTALS")
-print(f"Food : {FOOD}")
-print(f"Transport : {TRANSPORT}")
-print(f"Study : {STUDY}\n")
-print(f"Valid Expenses : {TOTAL_VALID}")
-print(f"Invalid Rows : {TOTAL_INVALID}")
-print(f"Grand Total : {TOTAL_AMOUNT}\n")
+if __name__ == " __main__" :
+    # Initialisng Threads
+    threads=[]
+    ind=0
+    for name in files_name :
+        t=threading.Thread(target= expense_summary,args=(name,ind),name=name )
+        ind+=1
+        threads.append(t)
+    #Starting thread
+    for t in threads:
+        t.start()
+    #Joining thread
+    for t in threads:
+        t.join()
+    #Printing the summary
+    print("EXPENSE SUMMARY\nCurrency:PKR")
+    for i in range(3):
+        print(f"{files_name[i]} : {file_valid[i]} valid , "
+              f"{file_invalid[i]} invalid ,total {file_total[i]}")
+    print("\nCATEGORY TOTALS")
+    print(f"Food : {FOOD}")
+    print(f"Transport : {TRANSPORT}")
+    print(f"Study : {STUDY}\n")
+    print(f"Valid Expenses : {TOTAL_VALID}")
+    print(f"Invalid Rows : {TOTAL_INVALID}")
+    print(f"Grand Total : {TOTAL_AMOUNT}\n")
